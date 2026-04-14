@@ -9,7 +9,7 @@ Rebuild the student dashboard using **Vue.js** via CDN. Same features as the van
 ## Prerequisites
 
 - Your Django backend running at localhost:8000 (Docker or local)
-- CORS enabled for localhost
+- CORS enabled for localhost (CORS_ALLOW_ALL_ORIGINS = True  # just for testing, remove after)
 - A browser (Chrome recommended)
 
 ---
