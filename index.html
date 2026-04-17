@@ -13,38 +13,127 @@
                 <h1>Student Dashboard</h1>
                 <!-- TODO: when logged in, show username and a logout button -->
                 <!-- Hint: use v-if="isLoggedIn" -->
+                <div v-if="isLoggedIn" id="auth-section">
+                    <span>Logged in as {{ username }}</span>
+                    <button type="button" id="logout-btn" @click="logout">Logout</button>
+                </div>
             </nav>
         </header>
 
         <main>
             <!-- Login Section -->
             <!-- TODO: only show this when NOT logged in -->
-            <section>
+            <section v-if="!isLoggedIn" id="login-section">
                 <h2>Login</h2>
                 <!-- TODO: login error message with v-if -->
                 <!-- TODO: form with @submit.prevent="handleLogin" -->
                 <!-- TODO: v-model inputs for username and password -->
                 <!-- TODO: submit button -->
+                <form id="login-form" @submit.prevent="handleLogin">
+                    <label for="username">Username</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        v-model.trim="username"
+                        required
+                        placeholder="Enter username"
+                    >
+
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        v-model="password"
+                        required
+                        placeholder="Enter password"
+                    >
+
+                    <div v-if="loginError" id="login-error" class="error-message">{{ loginError }}</div>
+                    <button type="submit">Login</button>
+                </form>
             </section>
 
             <!-- Dashboard Section -->
             <!-- TODO: only show this when logged in -->
-            <section>
+            <section v-else id="dashboard">
                 <h2>Students</h2>
 
                 <!-- TODO: search input with v-model -->
+                <form id="search-form" @submit.prevent>
+                    <input type="text" id="search-input" v-model.trim="searchTerm" placeholder="Search by name or email" />
+                    <button type="button" id="toggle-filters-btn" @click="showFilters = !showFilters">Filters</button>
+                    <div id="filters-panel" :class="{ hidden: !showFilters }">
+                        <select id="grade-filter" v-model="selectedGrade">
+                            <option value="">All grades</option>
+                            <option value="A+">A+</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="F">F</option>
+                            <option value="N/A">N/A</option>
+                        </select>
+                        <button type="button" id="reset-search-btn" @click="resetFilters">Reset</button>
+                    </div>
+                </form>
 
                 <!-- TODO: add student form -->
                 <!-- Fields: name, email, grade (select), course ID (number) -->
                 <!-- Use @submit.prevent and v-model on each input -->
+                <div class="card">
+                    <h3>Add New Student</h3>
+                    <form id="create-student-form" @submit.prevent="addStudent">
+                        <label for="student-name">Name</label>
+                        <input type="text" id="student-name" v-model.trim="newName" required placeholder="Full name" />
+
+                        <label for="student-email">Email</label>
+                        <input type="email" id="student-email" v-model.trim="newEmail" required placeholder="email@example.com" />
+
+                        <label for="student-grade">Grade</label>
+                        <select id="student-grade" v-model="newGrade" required>
+                            <option value="N/A">N/A</option>
+                            <option value="A+">A+</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="F">F</option>
+                        </select>
+
+                        <label for="student-course">Course</label>
+                        <select id="student-course" v-model="newCourseId" required>
+                            <option value="" disabled>Select a course</option>
+                            <option v-for="course in courses" :key="course.id" :value="String(course.id)">
+                                {{ course.code }} - {{ course.name }}
+                            </option>
+                        </select>
+
+                        <div v-if="createError" id="create-error" class="error-message">{{ createError }}</div>
+                        <button type="submit">Add Student</button>
+                    </form>
+                </div>
 
                 <!-- TODO: loading message with v-if -->
                 <!-- TODO: empty state with v-else-if -->
                 <!-- TODO: student cards with v-for and v-else -->
                 <!-- Each card: name, email, grade, delete button -->
+                <div v-if="isLoading" class="card">
+                    <p>Loading students...</p>
+                </div>
 
-                <div class="card-grid">
-                    <!-- Student cards rendered by Vue -->
+                <div v-else-if="filteredStudents.length === 0" class="card">
+                    <p>No students found.</p>
+                </div>
+
+                <div v-else class="card-grid" id="student-list">
+                    <article class="card" v-for="student in filteredStudents" :key="student.id">
+                        <h3>{{ student.name }}</h3>
+                        <p>Email: {{ student.email }}</p>
+                        <p>Grade: {{ student.grade }}</p>
+                        <button type="button" class="delete-btn" @click="deleteStudent(student.id)">Delete</button>
+                    </article>
                 </div>
             </section>
         </main>

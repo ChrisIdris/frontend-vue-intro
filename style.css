@@ -23,6 +23,21 @@ nav {
 
 nav h1 { color: #e2e8f0; font-size: 20px; }
 
+#auth-section {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    color: #cbd5e1;
+}
+
+#logout-btn {
+    background-color: #ef4444;
+}
+
+#logout-btn:hover {
+    background-color: #dc2626;
+}
+
 /* ═══ Main ═══ */
 main {
     max-width: 900px;
@@ -36,14 +51,109 @@ h2 { margin-bottom: 20px; color: #0f172a; }
 .hidden { display: none; }
 
 /* TODO: style cards (white background, padding, border-radius, shadow) */
+.card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.08);
+    margin-bottom: 20px;
+}
 
 /* TODO: style .card-grid (flexbox, wrap, gap) */
+.card-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card-grid .card {
+    flex: 1 1 260px;
+}
+
+#search-form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+#filters-panel {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
 
 /* TODO: style forms (inputs, labels, buttons) */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+label {
+    font-weight: 600;
+    color: #334155;
+}
+
+input,
+select {
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 10px;
+}
+
+button {
+    border: none;
+    border-radius: 6px;
+    padding: 10px 14px;
+    background-color: #2563eb;
+    color: #fff;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #1d4ed8;
+}
 
 /* TODO: style the delete button (red, small) */
+.delete-btn {
+    margin-top: 8px;
+    width: fit-content;
+    background-color: #ef4444;
+}
+
+.delete-btn:hover {
+    background-color: #dc2626;
+}
 
 /* TODO: style error messages (red text) */
+.error-message {
+    color: #b91c1c;
+    font-size: 14px;
+}
 
 /* TODO: add a media query for screens < 768px */
 /*       make cards stack vertically on mobile */
+@media (max-width: 768px) {
+    main {
+        padding: 20px;
+    }
+
+    nav {
+        padding: 15px 20px;
+    }
+
+    #auth-section {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .card-grid {
+        flex-direction: column;
+    }
+
+    .card-grid .card {
+        flex: 1 1 auto;
+    }
+}
